@@ -108,7 +108,7 @@ export const loadBugs = () => (dispatch, getState) => {
   } = getState().entities.bugs;
   const diffInMinutes = moment().diff(moment(lastFetch), 'minutes')
   if (diffInMinutes < 10) return;
-  dispatch(
+  return dispatch(
     // @ts-ignore
     apiCallBegan({
       url,
@@ -126,12 +126,11 @@ export const loadBugs = () => (dispatch, getState) => {
 // export const getUnresolvedBugs = state => state.entities.bugs.filter(bug => !bug.resolved)
 export const getUnresolvedBugs = createSelector(
   state => state.entities.bugs,
-  state => state.entities.projects,
-  (bugs, projects) => bugs.list.filter(bug => !bug.resolved)
+  (bugs) => bugs.list.filter(bug => !bug.resolved)
 );
 
 export const getBugsByUser = userId =>
   createSelector(
     state => state.entities.bugs,
-    bugs => bugs.filter(bug => bug.userId === userId)
+   bugs => bugs.list.filter(bug => bug.userId === userId)
   );
